@@ -8,30 +8,23 @@ namespace Domain
 {
     public class Matricula
     {
-        private string cedulaEstudiante;
+        private Estudiante estudiante;
         private string codigoGrupo;
         private DateTime fechaPago;
 
-        public Matricula(string cedulaEstudiante, string codigoGrupo, DateTime fechaPago)
+        public Matricula()
         {
-            this.cedulaEstudiante = cedulaEstudiante;
+            this.estudiante = new Estudiante();
+        }
+
+        public Matricula(Estudiante estudiante, string codigoGrupo, DateTime fechaPago)
+        {
+            this.Estudiante = estudiante;
             this.codigoGrupo = codigoGrupo;
             this.fechaPago = fechaPago;
         }
 
-        public string CedulaEstudiante
-        {
-            get
-            {
-                return cedulaEstudiante;
-            }
-
-            set
-            {
-                cedulaEstudiante = value;
-            }
-        }
-
+       
         public string CodigoGrupo
         {
             get
@@ -55,6 +48,19 @@ namespace Domain
             set
             {
                 fechaPago = value;
+            }
+        }
+
+        public Estudiante Estudiante
+        {
+            get
+            {
+                return estudiante;
+            }
+
+            set
+            {
+                estudiante = value;
             }
         }
     }

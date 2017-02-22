@@ -10,11 +10,18 @@ namespace Domain
     {
         private string codigo;
         private int grado;
+        private LinkedList<Curso> listaCursos;
 
-        public Grupo(string codigo, int grado)
+        public Grupo()
+        {
+            this.listaCursos = new LinkedList<Curso>();
+        }
+
+        public Grupo(string codigo, int grado, LinkedList<Curso> listaCursos)
         {
             this.codigo = codigo;
             this.grado = grado;
+            this.ListaCursos = listaCursos;
         }
 
         public string Codigo
@@ -40,6 +47,19 @@ namespace Domain
             set
             {
                 grado = value;
+            }
+        }
+
+        public LinkedList<Curso> ListaCursos
+        {
+            get
+            {
+                return listaCursos;
+            }
+
+            set
+            {
+                listaCursos = value;
             }
         }
     }

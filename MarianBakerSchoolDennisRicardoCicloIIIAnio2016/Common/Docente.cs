@@ -15,8 +15,14 @@ namespace Domain
         private int telefono;
         private string correo;
         private string direccion;
+        private LinkedList<Especialidad> listaEspecialidades;
 
-        public Docente(string cedula, string nombre, string primerApellido, string segundoApellido, int telefono, string correo, string direccion) {
+        public Docente()
+        {
+            this.listaEspecialidades = new LinkedList<Especialidad>();
+        }
+
+        public Docente(string cedula, string nombre, string primerApellido, string segundoApellido, int telefono, string correo, string direccion, LinkedList<Especialidad> listaEspecialidades) {
             this.cedula = cedula;
             this.nombre = nombre;
             this.primerApellido = primerApellido;
@@ -24,6 +30,7 @@ namespace Domain
             this.telefono = telefono;
             this.correo = correo;
             this.direccion = direccion;
+            this.ListaEspecialidades = listaEspecialidades;
         }
 
         public string Cedula
@@ -114,6 +121,19 @@ namespace Domain
             set
             {
                 direccion = value;
+            }
+        }
+
+        public LinkedList<Especialidad> ListaEspecialidades
+        {
+            get
+            {
+                return listaEspecialidades;
+            }
+
+            set
+            {
+                listaEspecialidades = value;
             }
         }
     }

@@ -9,18 +9,23 @@ namespace Domain
     public class Estudiante
     {
         private string cedula;
-        private string cedulaEncargado;
         private string nombre;
         private string primerApellido;
         private string segundoApellido;
+        private Encargado encargado;
 
-        public Estudiante(string cedula, string cedulaEncargado, string nombre, string primerApellido, string segundoApellido)
+        public Estudiante()
+        {
+            this.encargado = new Encargado();
+        }
+
+        public Estudiante(string cedula, string nombre, string primerApellido, string segundoApellido, Encargado encargado)
         {
             this.cedula = cedula;
-            this.cedulaEncargado = cedulaEncargado;
             this.nombre = nombre;
             this.primerApellido = primerApellido;
             this.segundoApellido = segundoApellido;
+            this.Encargado = encargado;
         }
 
         public string Cedula
@@ -33,19 +38,6 @@ namespace Domain
             set
             {
                 cedula = value;
-            }
-        }
-
-        public string CedulaEncargado
-        {
-            get
-            {
-                return cedulaEncargado;
-            }
-
-            set
-            {
-                cedulaEncargado = value;
             }
         }
 
@@ -85,6 +77,19 @@ namespace Domain
             set
             {
                 segundoApellido = value;
+            }
+        }
+
+        public Encargado Encargado
+        {
+            get
+            {
+                return encargado;
+            }
+
+            set
+            {
+                encargado = value;
             }
         }
     }

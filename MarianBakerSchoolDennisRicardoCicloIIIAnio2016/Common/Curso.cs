@@ -11,13 +11,18 @@ namespace Domain
     {
         private string codigo;
         private string nombre;
-        private string cedulaDocente;
+        private Docente docente;
 
-        public Curso(string codigo, string nombre, string cedulaDocente)
+        public Curso()
+        {
+            this.docente = new Docente();
+        }
+
+        public Curso(string codigo, string nombre, string cedulaDocente, Docente docente)
         {
             this.codigo = codigo;
             this.nombre = nombre;
-            this.cedulaDocente = cedulaDocente;
+            this.docente = docente;
         }
 
         public string Codigo
@@ -46,16 +51,16 @@ namespace Domain
             }
         }
 
-        public string CedulaDocente
+        public Docente Docente
         {
             get
             {
-                return cedulaDocente;
+                return docente;
             }
 
             set
             {
-                cedulaDocente = value;
+                docente = value;
             }
         }
     }

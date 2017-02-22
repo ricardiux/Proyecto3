@@ -9,14 +9,19 @@ namespace Domain
     public class Especialidad
     {
         private string codigo;
-        private string cedulaDocente;
         private string descripcion;
+        private Docente docente;
 
-        public Especialidad(string codigo, string cedulaDocente, string descripcion)
+        public Especialidad()
+        {
+            this.Docente = new Docente();
+        }
+
+        public Especialidad(string codigo,string descripcion, Docente docente)
         {
             this.codigo = codigo;
-            this.cedulaDocente = cedulaDocente;
             this.descripcion = descripcion;
+            this.Docente = docente;
         }
 
         public string Codigo
@@ -32,19 +37,6 @@ namespace Domain
             }
         }
 
-        public string CedulaDocente
-        {
-            get
-            {
-                return cedulaDocente;
-            }
-
-            set
-            {
-                cedulaDocente = value;
-            }
-        }
-
         public string Descripcion
         {
             get
@@ -55,6 +47,19 @@ namespace Domain
             set
             {
                 descripcion = value;
+            }
+        }
+
+        public Docente Docente
+        {
+            get
+            {
+                return docente;
+            }
+
+            set
+            {
+                docente = value;
             }
         }
     }

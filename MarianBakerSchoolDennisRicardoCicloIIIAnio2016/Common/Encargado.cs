@@ -17,8 +17,14 @@ namespace Domain
         private string direccion;
         private string usuario;
         private string clave;
+        private LinkedList<Estudiante> listaEstudiantes;
 
-        public Encargado(string cedula, string nombre, string primerApellido, string segundoApellido, int telefono, string correo, string direccion, string usuario, string clave)
+        public Encargado()
+        {
+            this.listaEstudiantes = new LinkedList<Estudiante>();
+        }
+
+        public Encargado(string cedula, string nombre, string primerApellido, string segundoApellido, int telefono, string correo, string direccion, string usuario, string clave, LinkedList<Estudiante> listaEstudiantes)
         {
             this.cedula = cedula;
             this.nombre = nombre;
@@ -29,6 +35,7 @@ namespace Domain
             this.direccion = direccion;
             this.usuario = usuario;
             this.clave = clave;
+            this.ListaEstudiantes = listaEstudiantes;
         }
 
         public string Cedula
@@ -145,6 +152,19 @@ namespace Domain
             set
             {
                 clave = value;
+            }
+        }
+
+        public LinkedList<Estudiante> ListaEstudiantes
+        {
+            get
+            {
+                return listaEstudiantes;
+            }
+
+            set
+            {
+                listaEstudiantes = value;
             }
         }
     }
