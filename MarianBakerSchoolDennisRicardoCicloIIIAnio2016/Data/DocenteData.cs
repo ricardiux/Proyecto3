@@ -26,17 +26,34 @@ namespace Data
             comandoObtenerDocentes.CommandType = System.Data.CommandType.StoredProcedure;
             connection.Open();
             SqlDataReader dataReader = comandoObtenerDocentes.ExecuteReader();
-            LinkedList<Docente> listaDocentes = new LinkedList<Curso>();
+            LinkedList<Docente> listaDocentes = new LinkedList<Docente>();
+            Docente docente = new Docente();
             while (dataReader.Read())
             {
-                Curso curso = new Curso();
-                curso.Codigo = dataReader["codigo"].ToString();
-                curso.Nombre = dataReader["nombreCurso"].ToString();
-                curso.Docente.Cedula = dataReader["cedulaDocente"].ToString();
-                curso.Docente.Nombre = dataReader["nombreDocente"].ToString();
-                curso.Docente.PrimerApellido = dataReader["primerApellido"].ToString();
+                docente.Cedula = dataReader["cedula"].ToString();
+                docente.Nombre = dataReader["nombre"].ToString();
+                docente.PrimerApellido = dataReader["primerApellido"].ToString();
+                docente.SegundoApellido = dataReader["segundoApellido"].ToString();
+                docente.Telefono = Int32.Parse(dataReader["telefono"].ToString());
+                docente.Correo = dataReader["correo"].ToString();
+                docente.Direccion = dataReader["direccion"].ToString();
 
-                listaDocentes.AddLast(curso);
+                //especialidades del docente
+                string sqlProcedureObtenerEspecialidades = "sp_obtener_docentes";
+                SqlCommand comandoObtenerEspecialidades = new SqlCommand(sqlProcedureObtenerEspecialidades, connection);
+                comandoObtenerEspecialidades.CommandType = System.Data.CommandType.StoredProcedure;
+                connection.Open();
+                SqlDataReader dataReaderEspecialidades = comandoObtenerEspecialidades.ExecuteReader();
+                LinkedList<Especialidad> listaEspecialidades = new LinkedList<Especialidad>();
+                Especialidad especialidad = new Especialidad();
+                while (dataReader.Read())
+                {
+                    especialidad.Codigo = dataReader["codigo"].ToString();
+                    especialidad.Descripcion = dataReader["descripcion"].ToString();
+                    listaEspecialidades.AddLast(especialidad);
+                }
+                docente.ListaEspecialidades = listaEspecialidades;
+                listaDocentes.AddLast(docente);
             }
             connection.Close();
             if (listaDocentes.Count == 0)
