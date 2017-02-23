@@ -1,6 +1,7 @@
 ﻿using Domain;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -24,89 +25,184 @@ namespace Data
             string sqlProcedureObtenerDocentes = "sp_obtener_docentes";
             SqlCommand comandoObtenerDocentes = new SqlCommand(sqlProcedureObtenerDocentes, connection);
             comandoObtenerDocentes.CommandType = System.Data.CommandType.StoredProcedure;
-            connection.Open();
-            SqlDataReader dataReader = comandoObtenerDocentes.ExecuteReader();
-            LinkedList<Docente> listaDocentes = new LinkedList<Docente>();
-            Docente docente = new Docente();
-            while (dataReader.Read())
-            {
-                docente.Cedula = dataReader["cedula"].ToString();
-                docente.Nombre = dataReader["nombre"].ToString();
-                docente.PrimerApellido = dataReader["primerApellido"].ToString();
-                docente.SegundoApellido = dataReader["segundoApellido"].ToString();
-                docente.Telefono = Int32.Parse(dataReader["telefono"].ToString());
-                docente.Correo = dataReader["correo"].ToString();
-                docente.Direccion = dataReader["direccion"].ToString();
-
-                //especialidades del docente
-                string sqlProcedureObtenerEspecialidades = "sp_obtener_docentes";
-                SqlCommand comandoObtenerEspecialidades = new SqlCommand(sqlProcedureObtenerEspecialidades, connection);
-                comandoObtenerEspecialidades.CommandType = System.Data.CommandType.StoredProcedure;
-                connection.Open();
-                SqlDataReader dataReaderEspecialidades = comandoObtenerEspecialidades.ExecuteReader();
-                LinkedList<Especialidad> listaEspecialidades = new LinkedList<Especialidad>();
-                Especialidad especialidad = new Especialidad();
-                while (dataReader.Read())
-                {
-                    especialidad.Codigo = dataReader["codigo"].ToString();
-                    especialidad.Descripcion = dataReader["descripcion"].ToString();
-                    listaEspecialidades.AddLast(especialidad);
-                }
-                docente.ListaEspecialidades = listaEspecialidades;
-                listaDocentes.AddLast(docente);
-            }
-            connection.Close();
-            if (listaDocentes.Count == 0)
-            {
-                return null;
-            }
-            return listaDocentes;
-        }
-
-        public Curso ObtenerCurso(string codigoCurso)
-        {
-            SqlConnection connection = new SqlConnection(stringConexion);
-            string sqlProcedureObtenerCurso = "sp_obtener_curso";
-            SqlCommand comandoObtenerCurso = new SqlCommand(sqlProcedureObtenerCurso, connection);
-            comandoObtenerCurso.CommandType = System.Data.CommandType.StoredProcedure;
-            comandoObtenerCurso.Parameters.Add(new SqlParameter("@codigo", codigoCurso));
-            connection.Open();
-            SqlDataReader dataReader = comandoObtenerCurso.ExecuteReader();
-            Curso curso = new Curso();
-            while (dataReader.Read())
-            {
-                curso.Codigo = dataReader["codigo"].ToString();
-                curso.Nombre = dataReader["nombreCurso"].ToString();
-                curso.Docente.Cedula = dataReader["cedulaDocente"].ToString();
-                curso.Docente.Nombre = dataReader["nombreDocente"].ToString();
-                curso.Docente.PrimerApellido = dataReader["primerApellido"].ToString();
-            }
-            connection.Close();
-            if (curso.Codigo == "")
-            {
-                return null;
-            }
-            return curso;
-        }
-
-        public void InsertarCurso(Curso curso)
-        {
-            string slqProcedureInsertarCurso = "sp_insertar_curso";
-            SqlConnection conexion = new SqlConnection(stringConexion);
-            SqlCommand cmdInsertarCurso = new SqlCommand(slqProcedureInsertarCurso, conexion);
-            cmdInsertarCurso.CommandType = System.Data.CommandType.StoredProcedure;
-
-            //Agregar los demas parametros restantes
-            cmdInsertarCurso.Parameters.Add(new SqlParameter("@codigo", curso.Codigo));
-            cmdInsertarCurso.Parameters.Add(new SqlParameter("@nombre", curso.Nombre));
-            cmdInsertarCurso.Parameters.Add(new SqlParameter("@cedulaDocente", curso.Docente.Cedula));
-            conexion.Open();
+            SqlDataAdapter dataAdapterDocentes;
+            DataSet dataSetDocentes;
             try
             {
-                cmdInsertarCurso.ExecuteNonQuery();
+                connection.Open();
+                dataAdapterDocentes = new SqlDataAdapter();
+                dataSetDocentes = new DataSet();
+                dataAdapterDocentes.SelectCommand = comandoObtenerDocentes;
+                dataAdapterDocentes.Fill(dataSetDocentes, "Docente");
+                LinkedList<Docente> listaDocentes = new LinkedList<Docente>();
+                Docente docente;
+
+                string sqlProcedureObtenerEspecialidades = "sp_buscar_especialidad_docente";
+                SqlCommand comandoObtenerEspecialidades;
+                LinkedList<Especialidad> listaEspecialidades;
+                Especialidad especialidad;
+                SqlDataAdapter dataAdapterEspecialidades;
+                DataSet dataSetEspecialidades;
+
+                foreach (DataRow fila in dataSetDocentes.Tables["Docente"].Rows)
+                {
+                    docente = new Docente();
+                    docente.Cedula = fila["cedula"].ToString();
+                    docente.Nombre = fila["nombre"].ToString();
+                    docente.PrimerApellido = fila["primerApellido"].ToString();
+                    docente.SegundoApellido = fila["segundoApellido"].ToString();
+                    docente.Telefono = Int32.Parse(fila["telefono"].ToString());
+                    docente.Correo = fila["correo"].ToString();
+                    docente.Direccion = fila["direccion"].ToString();
+
+                    //especialidades del docente
+                    comandoObtenerEspecialidades = new SqlCommand(sqlProcedureObtenerEspecialidades, connection);
+                    comandoObtenerEspecialidades.CommandType = System.Data.CommandType.StoredProcedure;
+                    comandoObtenerEspecialidades.Parameters.Add(new SqlParameter("@cedula", docente.Cedula));
+
+                    dataSetEspecialidades = new DataSet();
+                    dataAdapterEspecialidades = new SqlDataAdapter();
+                    dataAdapterEspecialidades.SelectCommand = comandoObtenerEspecialidades;
+                    dataAdapterEspecialidades.Fill(dataSetEspecialidades, "Especialidad");
+
+                    listaEspecialidades = new LinkedList<Especialidad>();
+
+                    foreach (DataRow filaEsp in dataSetEspecialidades.Tables["Especialidad"].Rows)
+                    {
+                        especialidad = new Especialidad();
+                        especialidad.Codigo = filaEsp["codigo"].ToString();
+                        especialidad.Descripcion = filaEsp["descripcion"].ToString();
+                        listaEspecialidades.AddLast(especialidad);
+                    }
+                    docente.ListaEspecialidades = listaEspecialidades;
+                    listaDocentes.AddLast(docente);
+                }
+                connection.Close();
+                return listaDocentes;
             }
             catch (SqlException ex)
             {
+                throw ex;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public Docente ObtenerDocente(string cedula)
+        {
+            SqlConnection connection = new SqlConnection(stringConexion);
+            string sqlProcedureObtenerDocentes = "sp_obtener_docente";
+            SqlCommand comandoObtenerDocentes = new SqlCommand(sqlProcedureObtenerDocentes, connection);
+            comandoObtenerDocentes.CommandType = System.Data.CommandType.StoredProcedure;
+            comandoObtenerDocentes.Parameters.Add(new SqlParameter("@cedula", cedula));
+            SqlDataAdapter dataAdapterDocentes;
+            DataSet dataSetDocentes;
+            try
+            {
+                connection.Open();
+                dataAdapterDocentes = new SqlDataAdapter();
+                dataSetDocentes = new DataSet();
+                dataAdapterDocentes.SelectCommand = comandoObtenerDocentes;
+                dataAdapterDocentes.Fill(dataSetDocentes, "Docente");
+                Docente docente = new Docente();
+
+                string sqlProcedureObtenerEspecialidades = "sp_buscar_especialidad_docente";
+                SqlCommand comandoObtenerEspecialidades;
+                LinkedList<Especialidad> listaEspecialidades;
+                Especialidad especialidad;
+                SqlDataAdapter dataAdapterEspecialidades;
+                DataSet dataSetEspecialidades;
+
+                foreach (DataRow fila in dataSetDocentes.Tables["Docente"].Rows)
+                {
+                    docente.Cedula = fila["cedula"].ToString();
+                    docente.Nombre = fila["nombre"].ToString();
+                    docente.PrimerApellido = fila["primerApellido"].ToString();
+                    docente.SegundoApellido = fila["segundoApellido"].ToString();
+                    docente.Telefono = Int32.Parse(fila["telefono"].ToString());
+                    docente.Correo = fila["correo"].ToString();
+                    docente.Direccion = fila["direccion"].ToString();
+
+                    //especialidades del docente
+                    comandoObtenerEspecialidades = new SqlCommand(sqlProcedureObtenerEspecialidades, connection);
+                    comandoObtenerEspecialidades.CommandType = System.Data.CommandType.StoredProcedure;
+                    comandoObtenerEspecialidades.Parameters.Add(new SqlParameter("@cedula", docente.Cedula));
+
+                    dataSetEspecialidades = new DataSet();
+                    dataAdapterEspecialidades = new SqlDataAdapter();
+                    dataAdapterEspecialidades.SelectCommand = comandoObtenerEspecialidades;
+                    dataAdapterEspecialidades.Fill(dataSetEspecialidades, "Especialidad");
+
+                    listaEspecialidades = new LinkedList<Especialidad>();
+
+                    foreach (DataRow filaEsp in dataSetEspecialidades.Tables["Especialidad"].Rows)
+                    {
+                        especialidad = new Especialidad();
+                        especialidad.Codigo = filaEsp["codigo"].ToString();
+                        especialidad.Descripcion = filaEsp["descripcion"].ToString();
+                        listaEspecialidades.AddLast(especialidad);
+                    }
+                    docente.ListaEspecialidades = listaEspecialidades;
+                }
+                connection.Close();
+                return docente;
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public void InsertarDocente(Docente docente)
+        {
+            SqlConnection conexion = new SqlConnection(stringConexion);
+            //Para insertar Docente
+            string slqProcedureInsertarDocente = "sp_insertar_docente";
+            SqlCommand cmdInsertarDocente = new SqlCommand(slqProcedureInsertarDocente, conexion);
+            cmdInsertarDocente.CommandType = System.Data.CommandType.StoredProcedure;
+
+            //Agregar los parametros del docente
+            cmdInsertarDocente.Parameters.Add(new SqlParameter("@cedula", docente.Cedula));
+            cmdInsertarDocente.Parameters.Add(new SqlParameter("@nombre", docente.Nombre));
+            cmdInsertarDocente.Parameters.Add(new SqlParameter("@primerApellido", docente.PrimerApellido));
+            cmdInsertarDocente.Parameters.Add(new SqlParameter("@segundoApellido", docente.SegundoApellido));
+            cmdInsertarDocente.Parameters.Add(new SqlParameter("@telefono", docente.Telefono));
+            cmdInsertarDocente.Parameters.Add(new SqlParameter("@correo", docente.Correo));
+            cmdInsertarDocente.Parameters.Add(new SqlParameter("@direccion", docente.Direccion));
+
+            //Para insertar sus Especialidades
+            string slqProcedureInsertarEspecialidad = "sp_insertar_especialidad";
+            SqlCommand cmdInsertarEspecialidad;
+
+            conexion.Open();
+            SqlTransaction transaccion = conexion.BeginTransaction();
+            try
+            {
+
+                cmdInsertarDocente.Transaction = transaccion;
+                cmdInsertarDocente.ExecuteNonQuery();
+                foreach (Especialidad especialidad in docente.ListaEspecialidades)
+                {
+                    cmdInsertarEspecialidad = new SqlCommand(slqProcedureInsertarEspecialidad, conexion);
+                    cmdInsertarEspecialidad.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmdInsertarEspecialidad.Transaction = transaccion;
+                    //agregar los parámetros de las especialidades
+                    cmdInsertarEspecialidad.Parameters.Add(new SqlParameter("@codigo", especialidad.Codigo));
+                    cmdInsertarEspecialidad.Parameters.Add(new SqlParameter("@cedula", docente.Cedula));
+                    cmdInsertarEspecialidad.Parameters.Add(new SqlParameter("@descripcion", especialidad.Descripcion));
+                    cmdInsertarEspecialidad.ExecuteNonQuery();
+                }
+                transaccion.Commit();
+            }
+            catch (SqlException ex)
+            {
+                transaccion.Rollback();
                 throw ex;
             }
             finally
@@ -115,20 +211,21 @@ namespace Data
             }
         }
 
-        public void ActualizarCurso(Curso curso)
+        public void ActualizarDocente(Docente docente)
         {
-            string slqProcedureActualizarCurso = "sp_actualizar_curso";
+            string slqProcedureActualizarDocente = "sp_actualizar_docente";
             SqlConnection conexion = new SqlConnection(stringConexion);
-            SqlCommand cmdActualizarCurso = new SqlCommand(slqProcedureActualizarCurso, conexion);
-            cmdActualizarCurso.CommandType = System.Data.CommandType.StoredProcedure;
+            SqlCommand cmdActualizarDocente = new SqlCommand(slqProcedureActualizarDocente, conexion);
+            cmdActualizarDocente.CommandType = System.Data.CommandType.StoredProcedure;
             //Agregar los demas parametros restantes
-            cmdActualizarCurso.Parameters.Add(new SqlParameter("@codigo", curso.Codigo));
-            cmdActualizarCurso.Parameters.Add(new SqlParameter("@nombre", curso.Nombre));
-            cmdActualizarCurso.Parameters.Add(new SqlParameter("@cedulaDocente", curso.Docente.Cedula));
-            conexion.Open();
+            cmdActualizarDocente.Parameters.Add(new SqlParameter("@cedula", docente.Cedula));
+            cmdActualizarDocente.Parameters.Add(new SqlParameter("@telefono", docente.Telefono));
+            cmdActualizarDocente.Parameters.Add(new SqlParameter("@correo", docente.Correo));
+            cmdActualizarDocente.Parameters.Add(new SqlParameter("@direccion", docente.Direccion));
             try
             {
-                cmdActualizarCurso.ExecuteNonQuery();
+                conexion.Open();
+                cmdActualizarDocente.ExecuteNonQuery();
             }
             catch (SqlException exc)
             {
@@ -140,60 +237,105 @@ namespace Data
             }
         }
 
-        public void EliminarCurso(string codigoCurso)
+        public void EliminarDocente(string cedula)
         {
-            string slqProcedureEliminarCurso = "sp_eliminar_curso";
+            //para eliminar docente
             SqlConnection conexion = new SqlConnection(stringConexion);
-            SqlCommand cmdEliminarCurso = new SqlCommand(slqProcedureEliminarCurso, conexion);
-            cmdEliminarCurso.CommandType = System.Data.CommandType.StoredProcedure;
-            //Agregar los demas parametros restantes
-            cmdEliminarCurso.Parameters.Add(new SqlParameter("@codigo", codigoCurso));
+            string slqProcedureEliminarDocente = "sp_eliminar_docente";
+            SqlCommand cmdEliminarDocente = new SqlCommand(slqProcedureEliminarDocente, conexion);
+            cmdEliminarDocente.CommandType = System.Data.CommandType.StoredProcedure;
+            cmdEliminarDocente.Parameters.Add(new SqlParameter("@cedula", cedula));
+            //Primero eliminamos todas las especialidades de docente
+            string slqProcedureEliminarEspecialidad = "sp_eliminar_especialidades_profesor";
+            SqlCommand cmdEliminarEspecialidad = new SqlCommand(slqProcedureEliminarEspecialidad, conexion);
+            cmdEliminarEspecialidad.CommandType = System.Data.CommandType.StoredProcedure;
+            cmdEliminarEspecialidad.Parameters.Add(new SqlParameter("@cedula", cedula));
+
             conexion.Open();
+            SqlTransaction transaccion = conexion.BeginTransaction();
+                cmdEliminarEspecialidad.Transaction = transaccion;
+                cmdEliminarDocente.Transaction = transaccion;
             try
             {
-                cmdEliminarCurso.ExecuteNonQuery();
+                cmdEliminarEspecialidad.ExecuteNonQuery();
+                cmdEliminarDocente.ExecuteNonQuery();
+
+                transaccion.Commit();
             }
             catch (SqlException exc)
             {
+                transaccion.Rollback();
                 throw exc;
             }
             finally
             {
                 conexion.Close();
             }
+        }//eliminar docente
 
-        }
-
-        public string GenerarCodigoCurso()
+        public string GenerarCodigoEspecialidad()
         {
             //obtenemos el último código
             SqlConnection connection = new SqlConnection(stringConexion);
-            string sqlProcedureObtenerCurso = "sp_obtener_ultimo_curso";
-            SqlCommand comandoObtenerCurso = new SqlCommand(sqlProcedureObtenerCurso, connection);
-            comandoObtenerCurso.CommandType = System.Data.CommandType.StoredProcedure;
-            connection.Open();
-            SqlDataReader dataReader = comandoObtenerCurso.ExecuteReader();
-            string codigo = "";
-
-            LinkedList<Curso> listaCursos = new LinkedList<Curso>();
-            while (dataReader.Read())
+            string sqlProcedureObtenerEspecialidad = "sp_obtener_ultima_especialidad";
+            SqlCommand comandoObtenerEspecialidad = new SqlCommand(sqlProcedureObtenerEspecialidad, connection);
+            comandoObtenerEspecialidad.CommandType = System.Data.CommandType.StoredProcedure;
+            try
             {
-                codigo = dataReader["codigo"].ToString();
+                connection.Open();
+                SqlDataReader dataReader = comandoObtenerEspecialidad.ExecuteReader();
+                string codigo = "";
+                LinkedList<Curso> listaCursos = new LinkedList<Curso>();
+                while (dataReader.Read())
+                {
+                    codigo = dataReader["codigo"].ToString();
+                }
+                if (codigo != "")
+                {
+                    //ahora lo manipulamos para generar el siguiente
+                    int numero = Int32.Parse(codigo.Remove(0, 4));
+                    numero++;
+                    codigo = "ESP-" + numero;
+                }
+                else
+                {
+                    codigo = "ESP-1";
+                }
+                connection.Close();
+                return codigo;
             }
-            if (codigo != "")
+            catch (SqlException exc)
             {
-                //ahora lo manipulamos para generar el siguiente
-                int numero = Int32.Parse(codigo.Remove(0, 6));
-                numero++;
-                codigo = "CURSO-" + numero;
+                throw exc;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }//Generar Codigo
+
+        public bool TieneCursos(string cedula)
+        {
+            SqlConnection connection = new SqlConnection(stringConexion);
+            string sqlProcedureObtenerEspecialidades = "sp_buscar_especialidad_docente";
+            SqlCommand comandoObtenerEspecialidades = new SqlCommand(sqlProcedureObtenerEspecialidades, connection);
+            comandoObtenerEspecialidades.Parameters.Add(new SqlParameter("@cedula", cedula));
+            comandoObtenerEspecialidades.CommandType = System.Data.CommandType.StoredProcedure;
+            connection.Open();
+            SqlDataReader dataReaderEspecialidades = comandoObtenerEspecialidades.ExecuteReader();
+            int cantidadCursos = 0;
+            while (dataReaderEspecialidades.Read())
+            {
+                cantidadCursos++;
+            }
+            if (cantidadCursos > 0)
+            {
+                return true;
             }
             else
             {
-                codigo = "CURSO-1";
+                return false;
             }
-            connection.Close();
-            return codigo;
-        }
-
+        }//TieneCursos
     }
 }

@@ -10,18 +10,15 @@ namespace Domain
     {
         private string codigo;
         private string descripcion;
-        private Docente docente;
 
         public Especialidad()
         {
-            this.Docente = new Docente();
         }
 
-        public Especialidad(string codigo,string descripcion, Docente docente)
+        public Especialidad(string codigo,string descripcion)
         {
             this.codigo = codigo;
             this.descripcion = descripcion;
-            this.Docente = docente;
         }
 
         public string Codigo
@@ -50,17 +47,5 @@ namespace Domain
             }
         }
 
-        public Docente Docente
-        {
-            get
-            {
-                return docente;
-            }
-
-            set
-            {
-                docente = value;
-            }
-        }
     }
 }

@@ -23,26 +23,33 @@ namespace Data
             string sqlProcedureObtenerCursos = "sp_obtener_cursos";
             SqlCommand comandoObtenerCursos = new SqlCommand(sqlProcedureObtenerCursos, connection);
             comandoObtenerCursos.CommandType = System.Data.CommandType.StoredProcedure;
-            connection.Open();
-            SqlDataReader dataReader = comandoObtenerCursos.ExecuteReader();
-            LinkedList<Curso> listaCursos = new LinkedList<Curso>();
-            while (dataReader.Read())
+            try
             {
-                Curso curso = new Curso();
-                curso.Codigo = dataReader["codigo"].ToString();
-                curso.Nombre = dataReader["nombreCurso"].ToString();
-                curso.Docente.Cedula = dataReader["cedulaDocente"].ToString();
-                curso.Docente.Nombre = dataReader["nombreDocente"].ToString();
-                curso.Docente.PrimerApellido = dataReader["primerApellido"].ToString();
+                connection.Open();
+                SqlDataReader dataReader = comandoObtenerCursos.ExecuteReader();
+                LinkedList<Curso> listaCursos = new LinkedList<Curso>();
+                while (dataReader.Read())
+                {
+                    Curso curso = new Curso();
+                    curso.Codigo = dataReader["codigo"].ToString();
+                    curso.Nombre = dataReader["nombreCurso"].ToString();
+                    curso.Docente.Cedula = dataReader["cedulaDocente"].ToString();
+                    curso.Docente.Nombre = dataReader["nombreDocente"].ToString();
+                    curso.Docente.PrimerApellido = dataReader["primerApellido"].ToString();
 
-                listaCursos.AddLast(curso);
+                    listaCursos.AddLast(curso);
+                }
+                connection.Close();
+                return listaCursos;
             }
-            connection.Close();
-            if (listaCursos.Count == 0)
+            catch (SqlException exc)
             {
-                return null;
+                throw exc;
             }
-            return listaCursos;
+            finally
+            {
+                connection.Close();
+            }
         }
 
         public Curso ObtenerCurso(string codigoCurso)
@@ -52,23 +59,30 @@ namespace Data
             SqlCommand comandoObtenerCurso = new SqlCommand(sqlProcedureObtenerCurso, connection);
             comandoObtenerCurso.CommandType = System.Data.CommandType.StoredProcedure;
             comandoObtenerCurso.Parameters.Add(new SqlParameter("@codigo", codigoCurso));
-            connection.Open();
-            SqlDataReader dataReader = comandoObtenerCurso.ExecuteReader();
-            Curso curso = new Curso();
-            while (dataReader.Read())
+            try
             {
-                curso.Codigo = dataReader["codigo"].ToString();
-                curso.Nombre = dataReader["nombreCurso"].ToString();
-                curso.Docente.Cedula = dataReader["cedulaDocente"].ToString();
-                curso.Docente.Nombre = dataReader["nombreDocente"].ToString();
-                curso.Docente.PrimerApellido = dataReader["primerApellido"].ToString();
+                connection.Open();
+                SqlDataReader dataReader = comandoObtenerCurso.ExecuteReader();
+                Curso curso = new Curso();
+                while (dataReader.Read())
+                {
+                    curso.Codigo = dataReader["codigo"].ToString();
+                    curso.Nombre = dataReader["nombreCurso"].ToString();
+                    curso.Docente.Cedula = dataReader["cedulaDocente"].ToString();
+                    curso.Docente.Nombre = dataReader["nombreDocente"].ToString();
+                    curso.Docente.PrimerApellido = dataReader["primerApellido"].ToString();
+                }
+                connection.Close();
+                return curso;
             }
-            connection.Close();
-            if (curso.Codigo == "")
+            catch (SqlException exc)
             {
-                return null;
+                throw exc;
             }
-            return curso;
+            finally
+            {
+                connection.Close();
+            }
         }
 
         public void InsertarCurso(Curso curso)
@@ -82,9 +96,9 @@ namespace Data
             cmdInsertarCurso.Parameters.Add(new SqlParameter("@codigo", curso.Codigo));
             cmdInsertarCurso.Parameters.Add(new SqlParameter("@nombre", curso.Nombre));
             cmdInsertarCurso.Parameters.Add(new SqlParameter("@cedulaDocente", curso.Docente.Cedula));
-            conexion.Open();
             try
             {
+                conexion.Open();
                 cmdInsertarCurso.ExecuteNonQuery();
             }
             catch (SqlException ex)
@@ -107,9 +121,9 @@ namespace Data
             cmdActualizarCurso.Parameters.Add(new SqlParameter("@codigo", curso.Codigo));
             cmdActualizarCurso.Parameters.Add(new SqlParameter("@nombre", curso.Nombre));
             cmdActualizarCurso.Parameters.Add(new SqlParameter("@cedulaDocente", curso.Docente.Cedula));
-            conexion.Open();
             try
             {
+                conexion.Open();
                 cmdActualizarCurso.ExecuteNonQuery();
             }
             catch (SqlException exc)
@@ -130,9 +144,9 @@ namespace Data
             cmdEliminarCurso.CommandType = System.Data.CommandType.StoredProcedure;
             //Agregar los demas parametros restantes
             cmdEliminarCurso.Parameters.Add(new SqlParameter("@codigo", codigoCurso));
-            conexion.Open();
             try
             {
+                conexion.Open();
                 cmdEliminarCurso.ExecuteNonQuery();
             }
             catch (SqlException exc)
@@ -153,28 +167,38 @@ namespace Data
             string sqlProcedureObtenerCurso = "sp_obtener_ultimo_curso";
             SqlCommand comandoObtenerCurso = new SqlCommand(sqlProcedureObtenerCurso, connection);
             comandoObtenerCurso.CommandType = System.Data.CommandType.StoredProcedure;
-            connection.Open();
-            SqlDataReader dataReader = comandoObtenerCurso.ExecuteReader();
-            string codigo = "";
-
-            LinkedList<Curso> listaCursos = new LinkedList<Curso>();
-            while (dataReader.Read())
+            try
             {
-                codigo = dataReader["codigo"].ToString();
+                connection.Open();
+                SqlDataReader dataReader = comandoObtenerCurso.ExecuteReader();
+                string codigo = "";
+                LinkedList<Curso> listaCursos = new LinkedList<Curso>();
+                while (dataReader.Read())
+                {
+                    codigo = dataReader["codigo"].ToString();
+                }
+                if (codigo != "")
+                {
+                    //ahora lo manipulamos para generar el siguiente
+                    int numero = Int32.Parse(codigo.Remove(0, 6));
+                    numero++;
+                    codigo = "CURSO-" + numero;
+                }
+                else
+                {
+                    codigo = "CURSO-1";
+                }
+                connection.Close();
+                return codigo;
             }
-            if (codigo != "")
+            catch (SqlException exc)
             {
-                //ahora lo manipulamos para generar el siguiente
-                int numero = Int32.Parse(codigo.Remove(0, 6));
-                numero++;
-                codigo = "CURSO-" + numero;
+                throw exc;
             }
-            else
+            finally
             {
-                codigo = "CURSO-1";
+                connection.Close();
             }
-            connection.Close();
-            return codigo;
-        }
+        }//Generar Codigo
     }
 }

@@ -53,6 +53,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Data\CursoDataTest.cs" />
+    <Compile Include="Data\DocenteDataTest.cs" />
+    <Compile Include="Data\EncargadoDataTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

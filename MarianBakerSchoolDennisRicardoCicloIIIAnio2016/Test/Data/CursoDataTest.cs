@@ -38,11 +38,11 @@ namespace Test
         //    this.cursoData.InsertarCurso(curso);
         //}
 
-        [TestMethod]
-        public void GenerarCodigoCurso()
-        {
-            Console.Write(this.cursoData.GenerarCodigoCurso());
-        }
+        //[TestMethod]
+        //public void GenerarCodigoCurso()
+        //{
+        //    Console.Write(this.cursoData.GenerarCodigoCurso());
+        //}
 
         //[TestMethod]
         //public void ObtenerCursos()
@@ -68,5 +68,7 @@ namespace Test
         ////    string codigoCurso = "CURSO-1";
         ////    this.cursoData.EliminarCurso(codigoCurso);
         ////}
+
+        
     }
 }
