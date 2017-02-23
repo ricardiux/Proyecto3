@@ -71,5 +71,18 @@ namespace Test.Data
         //    this.estudianteData.AsignarEncargadoAlEstudiante("4444444", "80808080");//asignar
         //    this.estudianteData.AsignarEncargadoAlEstudiante("4444444", "123456");//actualizar
         //}
+
+        //[TestMethod]
+        //public void TieneMatricula()
+        //{
+        //    if (this.estudianteData.TieneMatricula("80808080"))
+        //    {
+        //        Console.WriteLine("Sí tiene matrícula.");
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("No tiene matrícula.");
+        //    }
+        //}
     }
 }

@@ -185,5 +185,41 @@ namespace Data
                 conexion.Close();
             }//AsignarEncargado
         }
+
+        public bool TieneMatricula(string cedula)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            string sqlProcedureObtenerMatriculas = "sp_buscar_matriculas_estudiante";
+            SqlCommand comandoObtenerMatriculas = new SqlCommand(sqlProcedureObtenerMatriculas, connection);
+            comandoObtenerMatriculas.Parameters.Add(new SqlParameter("@cedula", cedula));
+            comandoObtenerMatriculas.CommandType = System.Data.CommandType.StoredProcedure;
+
+            try
+            {
+                connection.Open();
+                SqlDataReader dataReaderEspecialidades = comandoObtenerMatriculas.ExecuteReader();
+                int cantidadMatriculas = 0;
+                while (dataReaderEspecialidades.Read())
+                {
+                    cantidadMatriculas++;
+                }
+                if (cantidadMatriculas > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (SqlException exc)
+            {
+                throw exc;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }//TieneMatricula
     }
 }

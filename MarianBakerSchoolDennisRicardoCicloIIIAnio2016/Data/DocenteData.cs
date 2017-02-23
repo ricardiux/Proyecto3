@@ -321,20 +321,31 @@ namespace Data
             SqlCommand comandoObtenerEspecialidades = new SqlCommand(sqlProcedureObtenerEspecialidades, connection);
             comandoObtenerEspecialidades.Parameters.Add(new SqlParameter("@cedula", cedula));
             comandoObtenerEspecialidades.CommandType = System.Data.CommandType.StoredProcedure;
-            connection.Open();
-            SqlDataReader dataReaderEspecialidades = comandoObtenerEspecialidades.ExecuteReader();
-            int cantidadCursos = 0;
-            while (dataReaderEspecialidades.Read())
+            try
             {
-                cantidadCursos++;
+                connection.Open();
+                SqlDataReader dataReaderEspecialidades = comandoObtenerEspecialidades.ExecuteReader();
+                int cantidadCursos = 0;
+                while (dataReaderEspecialidades.Read())
+                {
+                    cantidadCursos++;
+                }
+                if (cantidadCursos > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            if (cantidadCursos > 0)
+            catch (SqlException exc)
             {
-                return true;
+                throw exc;
             }
-            else
+            finally
             {
-                return false;
+                connection.Close();
             }
         }//TieneCursos
 

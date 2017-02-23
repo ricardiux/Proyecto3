@@ -284,20 +284,30 @@ namespace Data
             SqlCommand comandoObtenerEstudiantes = new SqlCommand(sqlProcedureObtenerEstudiantes, connection);
             comandoObtenerEstudiantes.Parameters.Add(new SqlParameter("@codigoGrupo", codigoGrupo));
             comandoObtenerEstudiantes.CommandType = System.Data.CommandType.StoredProcedure;
-            connection.Open();
-            SqlDataReader dataReaderEspecialidades = comandoObtenerEstudiantes.ExecuteReader();
-            int cantidadEstudiantes = 0;
-            while (dataReaderEspecialidades.Read())
+            try
             {
-                cantidadEstudiantes++;
+                connection.Open();
+                SqlDataReader dataReaderEspecialidades = comandoObtenerEstudiantes.ExecuteReader();
+                int cantidadEstudiantes = 0;
+                while (dataReaderEspecialidades.Read())
+                {
+                    cantidadEstudiantes++;
+                }
+                if (cantidadEstudiantes > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            catch (SqlException exc)
+            {
+                throw exc;
             }
-            if (cantidadEstudiantes > 0)
+            finally
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                connection.Close();
             }
         }//TieneEstudiantes
 
