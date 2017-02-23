@@ -70,7 +70,7 @@ namespace Business
         {
             try
             {
-                this.grupoData.EliminarGrupo(grupo);
+                this.grupoData.EliminarGrupo(codigoGrupo);
             }
             catch (SqlException ex)
             {

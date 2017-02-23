@@ -45,6 +45,7 @@
     <Compile Include="EncargadoBusiness.cs" />
     <Compile Include="EstudianteBusiness.cs" />
     <Compile Include="GrupoBusiness.cs" />
+    <Compile Include="MatriculaBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

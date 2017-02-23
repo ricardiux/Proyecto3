@@ -301,6 +301,7 @@ namespace Data
                 {
                     return false;
                 }
+            }
             catch (SqlException exc)
             {
                 throw exc;
