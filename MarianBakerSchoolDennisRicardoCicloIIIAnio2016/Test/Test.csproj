@@ -55,6 +55,9 @@
     <Compile Include="Data\CursoDataTest.cs" />
     <Compile Include="Data\DocenteDataTest.cs" />
     <Compile Include="Data\EncargadoDataTest.cs" />
+    <Compile Include="Data\EstudianteDataTest.cs" />
+    <Compile Include="Data\GrupoDataTest.cs" />
+    <Compile Include="Data\MatriculaDataTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

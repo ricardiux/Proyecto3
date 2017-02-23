@@ -32,9 +32,8 @@ namespace Test
         //public void InsertarCurso()
         //{
         //    Curso curso = new Curso();
-        //    curso.Codigo = "CURSO-2";
-        //    curso.Nombre = "Español";
-        //    curso.Docente.Cedula = "112364526";
+        //    curso.Codigo = this.cursoData.GenerarCodigoCurso();
+        //    curso.Nombre = "Matematicas";
         //    this.cursoData.InsertarCurso(curso);
         //}
 
@@ -67,8 +66,13 @@ namespace Test
         ////{
         ////    string codigoCurso = "CURSO-1";
         ////    this.cursoData.EliminarCurso(codigoCurso);
-        ////}
+        ////}        
 
-        
+        //[TestMethod]
+        //public void AsignarCursoAlGrupo()
+        //{
+        //    this.cursoData.AsignarCursoAlGrupo("CURSO-3", "GRUPO-1");
+        //}
+
     }
 }

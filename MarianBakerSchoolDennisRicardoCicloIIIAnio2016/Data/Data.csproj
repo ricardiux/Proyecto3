@@ -46,6 +46,9 @@
     <Compile Include="CursoData.cs" />
     <Compile Include="DocenteData.cs" />
     <Compile Include="EncargadoData.cs" />
+    <Compile Include="EstudianteData.cs" />
+    <Compile Include="GrupoData.cs" />
+    <Compile Include="MatriculaData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

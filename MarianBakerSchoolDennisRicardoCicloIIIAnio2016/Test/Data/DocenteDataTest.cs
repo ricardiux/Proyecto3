@@ -97,10 +97,23 @@ namespace Test.Data
         //    }
         //}
 
-        [TestMethod]
-        public void ObtenerCodigo()
-        {
-            Console.Write(this.docenteData.GenerarCodigoEspecialidad());
-        }
+        //[TestMethod]
+        //public void ObtenerCodigo()
+        //{
+        //    Console.Write(this.docenteData.GenerarCodigoEspecialidad());
+        //}
+
+        //[TestMethod]
+        //public void AsignarEspecialidadAlDocente()
+        //{
+        //    this.docenteData.AsignarEspecialidadAlDocente("ESP-3", "888888888");
+        //}
+
+        //[TestMethod]
+        //public void AsignarCursoAlDocente()
+        //{
+        //    this.docenteData.AsignarCursoAlDocente("CURSO-1", "888888888");
+        //    this.docenteData.AsignarCursoAlDocente("CURSO-2", "888888888");
+        //}
     }
 }

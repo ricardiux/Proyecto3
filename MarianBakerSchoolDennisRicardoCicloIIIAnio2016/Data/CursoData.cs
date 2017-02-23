@@ -95,7 +95,6 @@ namespace Data
             //Agregar los demas parametros restantes
             cmdInsertarCurso.Parameters.Add(new SqlParameter("@codigo", curso.Codigo));
             cmdInsertarCurso.Parameters.Add(new SqlParameter("@nombre", curso.Nombre));
-            cmdInsertarCurso.Parameters.Add(new SqlParameter("@cedulaDocente", curso.Docente.Cedula));
             try
             {
                 conexion.Open();
@@ -200,5 +199,29 @@ namespace Data
                 connection.Close();
             }
         }//Generar Codigo
+
+        public void AsignarCursoAlGrupo(string codigoCurso, string codigoGrupo)
+        {
+            string slqProcedureAsignarCurso = "asignar_curso_a_grupo";
+            SqlConnection conexion = new SqlConnection(stringConexion);
+            SqlCommand cmdAsignarCurso = new SqlCommand(slqProcedureAsignarCurso, conexion);
+            cmdAsignarCurso.CommandType = System.Data.CommandType.StoredProcedure;
+            //Agregar los parametros 
+            cmdAsignarCurso.Parameters.Add(new SqlParameter("@codigoGrupo", codigoGrupo));
+            cmdAsignarCurso.Parameters.Add(new SqlParameter("@codigoCurso", codigoCurso));
+            try
+            {
+                conexion.Open();
+                cmdAsignarCurso.ExecuteNonQuery();
+            }
+            catch (SqlException exc)
+            {
+                throw exc;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+        }
     }
 }

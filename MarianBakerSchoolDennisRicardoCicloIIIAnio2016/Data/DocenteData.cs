@@ -253,8 +253,8 @@ namespace Data
 
             conexion.Open();
             SqlTransaction transaccion = conexion.BeginTransaction();
-                cmdEliminarEspecialidad.Transaction = transaccion;
-                cmdEliminarDocente.Transaction = transaccion;
+            cmdEliminarEspecialidad.Transaction = transaccion;
+            cmdEliminarDocente.Transaction = transaccion;
             try
             {
                 cmdEliminarEspecialidad.ExecuteNonQuery();
@@ -337,5 +337,52 @@ namespace Data
                 return false;
             }
         }//TieneCursos
+
+        public void AsignarEspecialidadAlDocente(string codigoEspecialidad, string cedulaDocente)
+        {
+            string slqProcedureAsignarEspecialidad = "asignar_docente_a_especialidad";
+            SqlConnection conexion = new SqlConnection(stringConexion);
+            SqlCommand cmdAsignarEspecialidad = new SqlCommand(slqProcedureAsignarEspecialidad, conexion);
+            cmdAsignarEspecialidad.CommandType = System.Data.CommandType.StoredProcedure;
+            //Agregar los parametros 
+            cmdAsignarEspecialidad.Parameters.Add(new SqlParameter("@cedulaDocente", cedulaDocente));
+            cmdAsignarEspecialidad.Parameters.Add(new SqlParameter("@codigoEspecialidad", codigoEspecialidad));
+            try
+            {
+                conexion.Open();
+                cmdAsignarEspecialidad.ExecuteNonQuery();
+            }
+            catch (SqlException exc)
+            {
+                throw exc;
+            }
+            finally
+            {
+                conexion.Close();
+            }//AsignarEspecialidad
+        }
+        public void AsignarCursoAlDocente(string codigoCurso, string cedulaDocente)
+        {
+            string slqProcedureAsignarCurso = "asignar_docente_a_curso";
+            SqlConnection conexion = new SqlConnection(stringConexion);
+            SqlCommand cmdAsignarCurso = new SqlCommand(slqProcedureAsignarCurso, conexion);
+            cmdAsignarCurso.CommandType = System.Data.CommandType.StoredProcedure;
+            //Agregar los parametros 
+            cmdAsignarCurso.Parameters.Add(new SqlParameter("@cedulaDocente", cedulaDocente));
+            cmdAsignarCurso.Parameters.Add(new SqlParameter("@codigoCurso", codigoCurso));
+            try
+            {
+                conexion.Open();
+                cmdAsignarCurso.ExecuteNonQuery();
+            }
+            catch (SqlException exc)
+            {
+                throw exc;
+            }
+            finally
+            {
+                conexion.Close();
+            }//AsignarCurso
+        }
     }
 }

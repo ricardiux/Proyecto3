@@ -9,34 +9,22 @@ namespace Domain
     public class Matricula
     {
         private Estudiante estudiante;
-        private string codigoGrupo;
+        private Grupo grupo;
         private DateTime fechaPago;
 
         public Matricula()
         {
             this.estudiante = new Estudiante();
+            this.grupo = new Grupo();
         }
 
-        public Matricula(Estudiante estudiante, string codigoGrupo, DateTime fechaPago)
+        public Matricula(Estudiante estudiante, Grupo grupo, DateTime fechaPago)
         {
             this.Estudiante = estudiante;
-            this.codigoGrupo = codigoGrupo;
+            this.Grupo = grupo;
             this.fechaPago = fechaPago;
         }
 
-       
-        public string CodigoGrupo
-        {
-            get
-            {
-                return codigoGrupo;
-            }
-
-            set
-            {
-                codigoGrupo = value;
-            }
-        }
 
         public DateTime FechaPago
         {
@@ -61,6 +49,19 @@ namespace Domain
             set
             {
                 estudiante = value;
+            }
+        }
+
+        public Grupo Grupo
+        {
+            get
+            {
+                return grupo;
+            }
+
+            set
+            {
+                grupo = value;
             }
         }
     }
