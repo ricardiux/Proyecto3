@@ -22,7 +22,8 @@ namespace Domain
             this.listaEspecialidades = new LinkedList<Especialidad>();
         }
 
-        public Docente(string cedula, string nombre, string primerApellido, string segundoApellido, int telefono, string correo, string direccion, LinkedList<Especialidad> listaEspecialidades) {
+        public Docente(string cedula, string nombre, string primerApellido, string segundoApellido, int telefono, string correo, string direccion, LinkedList<Especialidad> listaEspecialidades)
+        {
             this.cedula = cedula;
             this.nombre = nombre;
             this.primerApellido = primerApellido;
@@ -134,6 +135,14 @@ namespace Domain
             set
             {
                 listaEspecialidades = value;
+            }
+        }
+
+        public string NombreApellidos
+        {
+            get
+            {
+                return Nombre + " " + PrimerApellido + " " + SegundoApellido;
             }
         }
     }

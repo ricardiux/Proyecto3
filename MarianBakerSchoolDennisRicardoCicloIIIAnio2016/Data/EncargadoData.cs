@@ -179,8 +179,8 @@ namespace Data
             cmdInsertarEncargado.Parameters.Add(new SqlParameter("@telefono", encargado.Telefono));
             cmdInsertarEncargado.Parameters.Add(new SqlParameter("@correo", encargado.Correo));
             cmdInsertarEncargado.Parameters.Add(new SqlParameter("@direccion", encargado.Direccion));
-            cmdInsertarEncargado.Parameters.Add(new SqlParameter("@usuario", encargado.Correo));
-            cmdInsertarEncargado.Parameters.Add(new SqlParameter("@clave", encargado.Direccion));
+            cmdInsertarEncargado.Parameters.Add(new SqlParameter("@usuario", encargado.Usuario));
+            cmdInsertarEncargado.Parameters.Add(new SqlParameter("@clave", encargado.Clave));
 
             conexion.Open();
             try

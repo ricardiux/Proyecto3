@@ -54,11 +54,23 @@ namespace Business
             }
         }
 
-        public void ActualizarMatricula(Matricula matricula)
+        public void ActualizarFechaMatricula(Matricula matricula)
         {
             try
             {
-                this.matriculaData.ActualizarMatricula(matricula);
+                this.matriculaData.ActualizarFechaMatricula(matricula);
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void ActualizarMontoMatricula(Matricula matricula)
+        {
+            try
+            {
+                this.matriculaData.ActualizarMontoMatricula(matricula);
             }
             catch (SqlException ex)
             {

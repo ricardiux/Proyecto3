@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Busine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{C32E9D04-7C5A-4247-8251-58C6633EB355}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdministracionView", "AdministracionView\AdministracionView.csproj", "{F355DA63-65EA-446C-8014-6F773385B4A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VistaAdmin", "VistaAdmin\VistaAdmin.csproj", "{75C43426-8013-42AA-B399-2AE379012715}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{C32E9D04-7C5A-4247-8251-58C6633EB355}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C32E9D04-7C5A-4247-8251-58C6633EB355}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C32E9D04-7C5A-4247-8251-58C6633EB355}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F355DA63-65EA-446C-8014-6F773385B4A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F355DA63-65EA-446C-8014-6F773385B4A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F355DA63-65EA-446C-8014-6F773385B4A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F355DA63-65EA-446C-8014-6F773385B4A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75C43426-8013-42AA-B399-2AE379012715}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75C43426-8013-42AA-B399-2AE379012715}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75C43426-8013-42AA-B399-2AE379012715}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75C43426-8013-42AA-B399-2AE379012715}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

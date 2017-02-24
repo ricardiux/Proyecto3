@@ -18,12 +18,25 @@ namespace Business
             this.docenteData = new DocenteData(connectionString);
         }
 
+        public LinkedList<Especialidad> ObtenerEspecialidades()
+        {
+            try
+            {
+                return this.docenteData.ObtenerEspecialidades();
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+        }
+
         public LinkedList<Docente> ObtenerDocentes()
         {
             try
             {
                 return this.docenteData.ObtenerDocentes();
-            }catch (SqlException ex)
+            }
+            catch (SqlException ex)
             {
                 throw ex;
             }
@@ -46,6 +59,18 @@ namespace Business
             try
             {
                 this.docenteData.InsertarDocente(docente);
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void InsertarEspecialidad(Especialidad especialidad)
+        {
+            try
+            {
+                this.docenteData.InsertarEspecialidad(especialidad);
             }
             catch (SqlException ex)
             {

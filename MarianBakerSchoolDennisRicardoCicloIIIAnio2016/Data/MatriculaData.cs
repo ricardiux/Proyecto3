@@ -1,6 +1,7 @@
 ﻿using Domain;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -23,26 +24,56 @@ namespace Data
             string sqlProcedureObtenerMatriculas = "sp_obtener_matriculas";
             SqlCommand comandoObtenerMatriculas = new SqlCommand(sqlProcedureObtenerMatriculas, connection);
             comandoObtenerMatriculas.CommandType = System.Data.CommandType.StoredProcedure;
+            SqlDataAdapter dataAdapterMatriculas;
+            DataSet dataSetMatriculas;
             try
             {
                 connection.Open();
-                SqlDataReader dataReader = comandoObtenerMatriculas.ExecuteReader();
+                dataAdapterMatriculas = new SqlDataAdapter();
+                dataSetMatriculas = new DataSet();
+                dataAdapterMatriculas.SelectCommand = comandoObtenerMatriculas;
+                dataAdapterMatriculas.Fill(dataSetMatriculas, "Matricula");
                 LinkedList<Matricula> listaMatriculas = new LinkedList<Matricula>();
-                while (dataReader.Read())
-                {
-                    Matricula matricula = new Matricula();
-                    matricula.Estudiante.Cedula = dataReader["cedulaEstudiante"].ToString();
-                    matricula.Grupo.Codigo = dataReader["codigoGrupo"].ToString();
-                    matricula.FechaPago = DateTime.Parse(dataReader["fechaPago"].ToString());
+                Matricula matricula;
 
+                string sqlProcedureObtenerEstudiante = "sp_obtener_estudiante";
+                SqlCommand comandoObtenerEstudiante;
+                SqlDataAdapter dataAdapterEspecialidades;
+                DataSet dataSetEspecialidades;
+
+                foreach (DataRow fila in dataSetMatriculas.Tables["Matricula"].Rows)
+                {
+                    matricula = new Matricula();
+                    matricula.Estudiante.Cedula = fila["cedulaEstudiante"].ToString();
+                    matricula.Grupo.Codigo = fila["codigoGrupo"].ToString();
+                    matricula.FechaPago = DateTime.Parse(fila["fechaPago"].ToString());
+                    matricula.Monto = float.Parse(fila["monto"].ToString());
+
+                    //estudiante de la matricula
+                    comandoObtenerEstudiante = new SqlCommand(sqlProcedureObtenerEstudiante, connection);
+                    comandoObtenerEstudiante.CommandType = System.Data.CommandType.StoredProcedure;
+                    comandoObtenerEstudiante.Parameters.Add(new SqlParameter("@cedula", matricula.Estudiante.Cedula));
+
+                    dataSetEspecialidades = new DataSet();
+                    dataAdapterEspecialidades = new SqlDataAdapter();
+                    dataAdapterEspecialidades.SelectCommand = comandoObtenerEstudiante;
+                    dataAdapterEspecialidades.Fill(dataSetEspecialidades, "Estudiante");
+
+                    foreach (DataRow filaEst in dataSetEspecialidades.Tables["Estudiante"].Rows)
+                    {
+                        matricula.Estudiante.Nombre = filaEst["nombre"].ToString();
+                        matricula.Estudiante.PrimerApellido = filaEst["primerApellido"].ToString();
+                        matricula.Estudiante.SegundoApellido = filaEst["segundoApellido"].ToString();
+                    }
+                    
                     listaMatriculas.AddLast(matricula);
                 }
                 connection.Close();
                 return listaMatriculas;
             }
-            catch (SqlException exc)
+            catch (SqlException ex)
             {
-                throw exc;
+                throw ex;
             }
             finally
             {
@@ -84,19 +115,20 @@ namespace Data
 
         public void InsertarMatricula(Matricula matricula)
         {
-            string slqProcedureInsertarCurso = "sp_insertar_Matricula";
+            string slqProcedureInsertarMatricula = "sp_insertar_matricula";
             SqlConnection conexion = new SqlConnection(connectionString);
-            SqlCommand cmdInsertarCurso = new SqlCommand(slqProcedureInsertarCurso, conexion);
-            cmdInsertarCurso.CommandType = System.Data.CommandType.StoredProcedure;
+            SqlCommand cmdInsertarMatricula = new SqlCommand(slqProcedureInsertarMatricula, conexion);
+            cmdInsertarMatricula.CommandType = System.Data.CommandType.StoredProcedure;
 
             //Agregar los demas parametros restantes
-            cmdInsertarCurso.Parameters.Add(new SqlParameter("@cedulaEstudiante", matricula.Estudiante.Cedula));
-            cmdInsertarCurso.Parameters.Add(new SqlParameter("@codigoGrupo", matricula.Grupo.Codigo));
-            cmdInsertarCurso.Parameters.Add(new SqlParameter("@fechaPago", matricula.FechaPago));
+            cmdInsertarMatricula.Parameters.Add(new SqlParameter("@cedulaEstudiante", matricula.Estudiante.Cedula));
+            cmdInsertarMatricula.Parameters.Add(new SqlParameter("@codigoGrupo", matricula.Grupo.Codigo));
+            cmdInsertarMatricula.Parameters.Add(new SqlParameter("@fechaPago", matricula.FechaPago));
+            cmdInsertarMatricula.Parameters.Add(new SqlParameter("@monto", matricula.Monto));
             try
             {
                 conexion.Open();
-                cmdInsertarCurso.ExecuteNonQuery();
+                cmdInsertarMatricula.ExecuteNonQuery();
             }
             catch (SqlException ex)
             {
@@ -108,9 +140,9 @@ namespace Data
             }
         }
 
-        public void ActualizarMatricula(Matricula matricula)
+        public void ActualizarFechaMatricula(Matricula matricula)
         {
-            string slqProcedureActualizarMatricula = "sp_actualizar_matricula";
+            string slqProcedureActualizarMatricula = "sp_actualizar_fecha_matricula";
             SqlConnection conexion = new SqlConnection(connectionString);
             SqlCommand cmdActualizarMatricula = new SqlCommand(slqProcedureActualizarMatricula, conexion);
             cmdActualizarMatricula.CommandType = System.Data.CommandType.StoredProcedure;
@@ -118,6 +150,31 @@ namespace Data
             cmdActualizarMatricula.Parameters.Add(new SqlParameter("@cedulaEstudiante", matricula.Estudiante.Cedula));
             cmdActualizarMatricula.Parameters.Add(new SqlParameter("@codigoGrupo", matricula.Grupo.Codigo));
             cmdActualizarMatricula.Parameters.Add(new SqlParameter("@fechaPago", matricula.FechaPago));
+            try
+            {
+                conexion.Open();
+                cmdActualizarMatricula.ExecuteNonQuery();
+            }
+            catch (SqlException exc)
+            {
+                throw exc;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+        }
+
+        public void ActualizarMontoMatricula(Matricula matricula)
+        {
+            string slqProcedureActualizarMatricula = "sp_actualizar_monto_matricula";
+            SqlConnection conexion = new SqlConnection(connectionString);
+            SqlCommand cmdActualizarMatricula = new SqlCommand(slqProcedureActualizarMatricula, conexion);
+            cmdActualizarMatricula.CommandType = System.Data.CommandType.StoredProcedure;
+            //Agregar los demas parametros restantes
+            cmdActualizarMatricula.Parameters.Add(new SqlParameter("@cedulaEstudiante", matricula.Estudiante.Cedula));
+            cmdActualizarMatricula.Parameters.Add(new SqlParameter("@codigoGrupo", matricula.Grupo.Codigo));
+            cmdActualizarMatricula.Parameters.Add(new SqlParameter("@monto", matricula.Monto));
             try
             {
                 conexion.Open();

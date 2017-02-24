@@ -94,7 +94,6 @@ namespace Data
 
             //Agregar los demas parametros restantes
             cmdInsertarEstudiante.Parameters.Add(new SqlParameter("@cedula", estudiante.Cedula));
-            cmdInsertarEstudiante.Parameters.Add(new SqlParameter("@cedulaEncargado", estudiante.Encargado.Cedula));
             cmdInsertarEstudiante.Parameters.Add(new SqlParameter("@nombre", estudiante.Nombre));
             cmdInsertarEstudiante.Parameters.Add(new SqlParameter("@primerApellido", estudiante.PrimerApellido));
             cmdInsertarEstudiante.Parameters.Add(new SqlParameter("@segundoApellido", estudiante.SegundoApellido));
