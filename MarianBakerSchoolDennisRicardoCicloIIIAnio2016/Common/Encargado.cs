@@ -167,5 +167,13 @@ namespace Domain
                 listaEstudiantes = value;
             }
         }
+
+        public string NombreApellidos
+        {
+            get
+            {
+                return Nombre + " " + PrimerApellido + " " + SegundoApellido;
+            }
+        }
     }
 }

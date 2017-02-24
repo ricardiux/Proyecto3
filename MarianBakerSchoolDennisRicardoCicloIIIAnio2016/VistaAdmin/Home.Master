@@ -1,0 +1,67 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Home.master.cs" Inherits="VistaAdmin.Home" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>Marian Baker Shool</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link href="css/rp-stylesheet.css" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <div id="container">
+        <div id="header">
+            <h1><a href="inicio.aspx"><span>Marian Baker</span>School</a></h1>
+            <br>
+            <br>
+            <br>
+            <ul>
+                <li><a href="Inicio.aspx" class="on">Inicio</a></li>
+                <li><a href="Estudiantes.aspx">Estudiantes</a></li>
+                <li><a href="Matricula.aspx">Matr&iacute;cula</a></li>
+                <li><a href="Docentes.aspx">Docentes</a></li>
+                <li><a href="Especialidades.aspx">Especialidades</a></li>
+                <li><a href="Grupos.aspx">Grupos</a></li>
+                <li><a href="Cursos.aspx">Cursos</a></li>
+            </ul>
+        </div>
+        <div id="body">
+            <div>
+                <div>
+                    <div id="sub">
+                        <h4>Escuela Bilingüe</h4>
+                        <p>Contamos con una amplia experiencia en la enseñanza integral.</p>
+                        <h4>Servicios</h4>
+                        <ul>
+                            <li><a href="http://all-free-download.com/free-website-templates/">Preescolar</a></li>
+                            <li><a href="http://all-free-download.com/free-website-templates/">Escuela</a></li>
+                            <li><a href="http://all-free-download.com/free-website-templates/">Colegio</a></li>
+                        </ul>
+                    </div>
+                    <div id="content">
+                        <form id="form1" runat="server">
+
+                            <div>
+                                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                                </asp:ContentPlaceHolder>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <span><a href="#header">
+                <img src="img/top.gif" alt="top" width="29" height="30" /></a></span>
+            <p>Content &copy; <a href="http://all-free-download.com/free-website-templates/">YourName</a>. Design &copy; <a href="http://www.growldesign.co.uk">growldesign</a>.</p>
+        </div>
+    </div>
+    <div align="center">This template  downloaded form <a href='http://all-free-download.com/free-website-templates/'>free website templates</a></div>
+
+
+</body>
+</html>
+
+

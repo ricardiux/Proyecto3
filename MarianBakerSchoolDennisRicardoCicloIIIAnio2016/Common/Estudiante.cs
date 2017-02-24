@@ -92,5 +92,13 @@ namespace Domain
                 encargado = value;
             }
         }
+
+        public string NombreApellidos
+        {
+            get
+            {
+                return Nombre + " " + PrimerApellido + " " + SegundoApellido;
+            }
+        }
     }
 }

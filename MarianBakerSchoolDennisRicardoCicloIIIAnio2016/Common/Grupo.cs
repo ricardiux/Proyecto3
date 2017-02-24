@@ -62,5 +62,13 @@ namespace Domain
                 listaCursos = value;
             }
         }
+
+        public string GrupoGrado
+        {
+            get
+            {
+                return Codigo + ", " + Grado + "º grado";
+            }
+        }
     }
 }

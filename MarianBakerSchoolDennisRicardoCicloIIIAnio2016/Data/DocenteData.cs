@@ -19,6 +19,38 @@ namespace Data
             this.stringConexion = stringConexion;
         }
 
+        public LinkedList<Especialidad> ObtenerEspecialidades()
+        {
+            SqlConnection connection = new SqlConnection(stringConexion);
+            string sqlProcedureObtenerEspecialidades = "sp_obtener_especialidades";
+            SqlCommand comandoObtenerEspecialidades = new SqlCommand(sqlProcedureObtenerEspecialidades, connection);
+            comandoObtenerEspecialidades.CommandType = System.Data.CommandType.StoredProcedure;
+            try
+            {
+                connection.Open();
+                SqlDataReader dataReader = comandoObtenerEspecialidades.ExecuteReader();
+                LinkedList<Especialidad> listaEspecialidades = new LinkedList<Especialidad>();
+                while (dataReader.Read())
+                {
+                    Especialidad especialidad = new Especialidad();
+                    especialidad.Codigo = dataReader["codigo"].ToString();
+                    especialidad.Descripcion = dataReader["descripcion"].ToString();
+
+                    listaEspecialidades.AddLast(especialidad);
+                }
+                connection.Close();
+                return listaEspecialidades;
+            }
+            catch (SqlException exc)
+            {
+                throw exc;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
         public LinkedList<Docente> ObtenerDocentes()
         {
             SqlConnection connection = new SqlConnection(stringConexion);
@@ -349,6 +381,30 @@ namespace Data
             }
         }//TieneCursos
 
+        public void InsertarEspecialidad(Especialidad especialidad)
+        {
+            string slqProcedureInsertarEspecialidad = "sp_insertar_especialidad";
+            SqlConnection conexion = new SqlConnection(stringConexion);
+            SqlCommand cmdInsertarEspecialidad = new SqlCommand(slqProcedureInsertarEspecialidad, conexion);
+            cmdInsertarEspecialidad.CommandType = System.Data.CommandType.StoredProcedure;
+            //Agregar los parametros 
+            cmdInsertarEspecialidad.Parameters.Add(new SqlParameter("@codigo", especialidad.Codigo));
+            cmdInsertarEspecialidad.Parameters.Add(new SqlParameter("@descripcion", especialidad.Descripcion));
+            try
+            {
+                conexion.Open();
+                cmdInsertarEspecialidad.ExecuteNonQuery();
+            }
+            catch (SqlException exc)
+            {
+                throw exc;
+            }
+            finally
+            {
+                conexion.Close();
+            }//AsignarEspecialidad
+        }
+
         public void AsignarEspecialidadAlDocente(string codigoEspecialidad, string cedulaDocente)
         {
             string slqProcedureAsignarEspecialidad = "asignar_docente_a_especialidad";
@@ -370,8 +426,9 @@ namespace Data
             finally
             {
                 conexion.Close();
-            }//AsignarEspecialidad
-        }
+            }
+        }//AsignarEspecialidad
+
         public void AsignarCursoAlDocente(string codigoCurso, string cedulaDocente)
         {
             string slqProcedureAsignarCurso = "asignar_docente_a_curso";

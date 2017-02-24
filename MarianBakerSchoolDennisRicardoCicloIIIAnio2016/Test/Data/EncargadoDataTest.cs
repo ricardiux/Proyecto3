@@ -49,22 +49,22 @@ namespace Test.Data
         //    }
         //}//ObtenerEncargado
 
-        //[TestMethod]
-        //public void InsertarEncargado()
-        //{
-        //    Encargado encargado = new Encargado();
-        //    encargado.Cedula = "66666666";
-        //    encargado.Nombre = "Usuario";
-        //    encargado.PrimerApellido = "Apellido1";
-        //    encargado.SegundoApellido = "Apellido2";
-        //    encargado.Telefono = 8888899;
-        //    encargado.Correo = "correo";
-        //    encargado.Direccion = "direccion";
-        //    encargado.Usuario = "usuario";
-        //    encargado.Clave = "1111";
+        [TestMethod]
+        public void InsertarEncargado()
+        {
+            Encargado encargado = new Encargado();
+            encargado.Cedula = "66666666";
+            encargado.Nombre = "Usuario";
+            encargado.PrimerApellido = "Apellido1";
+            encargado.SegundoApellido = "Apellido2";
+            encargado.Telefono = 8888899;
+            encargado.Correo = "correo";
+            encargado.Direccion = "direccion";
+            encargado.Usuario = "usuario";
+            encargado.Clave = "1111";
 
-        //    this.encargadoData.InsertarEncargado(encargado);
-        //}
+            this.encargadoData.InsertarEncargado(encargado);
+        }
 
         //[TestMethod]
         //public void ActualizarEncargado()
